@@ -9,13 +9,39 @@ const kBottomConstraintColor = Color(0xFFEB1555);
   Color femaleCardColour = activeCardColor;*/
 
 const kLabelTextStyle = TextStyle(
-    fontSize: 16.0,
+    fontSize: 18.0,
     color: Color(0xFF8E8D98)
 );
 
 const kNumTextStyle = TextStyle(
     fontSize: 50.0,
     fontWeight: FontWeight.w900,
+);
+
+const kCalcButtonTextStyle = TextStyle(
+    fontWeight: FontWeight.w900,
+    fontSize: 20.0,
+);
+
+const kBodyTextStyle = TextStyle(
+    fontWeight: FontWeight.w700,
+    fontSize: 20.0,
+);
+
+const kTitleTextStyle = TextStyle(
+    fontSize: 50.0,
+    fontWeight: FontWeight.bold,
+);
+
+const kResultTextStyle = TextStyle(
+    color: Colors.greenAccent,
+    fontSize: 20.0,
+    fontWeight: FontWeight.bold,
+);
+
+const kResultNumTextStyle = TextStyle(
+    fontSize: 90.0,
+    fontWeight: FontWeight.bold,
 );
 
 const minHt = 100.0;

@@ -1,13 +1,18 @@
 import 'dart:ui';
 
-import 'package:bmi_calculator/reusablecard.dart';
+import 'package:bmi_calculator/calculator_brain.dart';
+import 'package:bmi_calculator/components/reusablecard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'constants.dart';
 
-import 'iconcontent.dart';
-import 'reusablecard.dart';
+import '../constants.dart';
+import '../components/iconcontent.dart';
+import '../components/reusablecard.dart';
+import '../components/bottom_button.dart';
+
+// Routes
+import 'result_page.dart';
 
 enum Gender {
   male,
@@ -24,7 +29,7 @@ class _InputPageState extends State<InputPage> {
   Gender selectedGender;
 
   int height = 180;
-  double weight = 60.0;
+  double weight = 60;
   int age = 20;
 
   /*void changeColour(Gender key) {
@@ -152,16 +157,45 @@ class _InputPageState extends State<InputPage> {
                             crossAxisAlignment: CrossAxisAlignment.baseline,
                             textBaseline: TextBaseline.alphabetic,
                             children: [
-                              Text(weight.toString(), style: kNumTextStyle,),
+                              Text(weight.toStringAsFixed(1), style: kNumTextStyle,),
                               SizedBox(width: 5.0,),
                               Text('kg', style: kLabelTextStyle,),
                             ],
                           ),
-                          FloatingActionButton(
-                            backgroundColor: kActiveCardColor,
-                            child: Icon(
-                              Icons.add,
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              /*FloatingActionButton(
+                                onPressed: () {
+                                  setState(() {
+                                    weight--;
+                                  });
+                                },
+                                backgroundColor: kBottomConstraintColor,
+                                child: Icon(
+                                  Icons.remove,
+                                  size: 40.0,
+                                  color: Colors.grey.shade400,
+                                ),
+                              )*/
+                              IteratorButton(
+                                icon: FontAwesomeIcons.minus,
+                                onPressed: () {
+                                  setState(() {
+                                    weight -= 0.1;
+                                  });
+                                },
+                              ),
+                              SizedBox(width: 20.0,),
+                              IteratorButton(
+                                icon: FontAwesomeIcons.plus,
+                                onPressed: (){
+                                  setState(() {
+                                    weight += 0.1;
+                                  });
+                                },
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -181,9 +215,31 @@ class _InputPageState extends State<InputPage> {
                             children: [
                               Text(age.toString(), style: kNumTextStyle,),
                               SizedBox(width: 5.0,),
-                              Text('years', style: kLabelTextStyle,),
+                              Text('yr', style: kLabelTextStyle,),
                             ],
-                          )
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IteratorButton(
+                                icon: FontAwesomeIcons.minus,
+                                onPressed: () {
+                                  setState(() {
+                                    age--;
+                                  });
+                                },
+                              ),
+                              SizedBox(width: 20.0,),
+                              IteratorButton(
+                                icon: FontAwesomeIcons.plus,
+                                onPressed: () {
+                                  setState(() {
+                                    age++;
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                     ),
@@ -191,29 +247,52 @@ class _InputPageState extends State<InputPage> {
                 ],
               ),
           ),
-          Container(
-            margin: EdgeInsets.symmetric(vertical: 10.0,horizontal: 15.0),
-            width: double.infinity,
-            height: kBottomContainerHeight,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0),
-              color: kBottomConstraintColor,
-            ),
-            child: Text(
-              'Calculate BMI',
-              style: TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.w900,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          )
+          BottomButton(
+            onTap: () {
+              CalculatorBrain calc = CalculatorBrain(height: height, weight: weight);
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ResultPage(
+                    bmiResult: calc.calculateBMI(),
+                    resultText: calc.getResult(),
+                    interpretation: calc.getInterpretation(),
+                  ),
+                ),
+              );
+            },
+            buttonTitle: 'CALCULATE BMI',
+          ),
         ],
       ),
     );
   }
 }
 
+
+class IteratorButton extends StatelessWidget {
+
+  const IteratorButton({@required this.icon, @required this.onPressed});
+
+  final IconData icon;
+  final Function onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return RawMaterialButton(
+      shape: CircleBorder(),
+      fillColor: kBottomConstraintColor,
+      onPressed: onPressed,
+      elevation: 6.0,
+      constraints: BoxConstraints.tightFor(
+        width: 50.0,
+        height: 50.0,
+      ),
+      child: Icon(icon),
+    );
+  }
+}
 
 
 
